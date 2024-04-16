@@ -4,6 +4,8 @@ import fastifyStatic from "@fastify/static";
 import path from "path";
 
 const fastify = Fastify({ logger: true });
+const port = (process.env.PORT as unknown as number) || 3000;
+const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 fastify.register(fastifyStatic, {
     root: path.join(__dirname, "../dist"),
@@ -22,4 +24,4 @@ fastify.get("/api/tiktok", async function handler(request: FastifyRequest<{ Quer
     return res;
 });
 
-fastify.listen({ port: 3000 });
+fastify.listen({ host: host, port: port });
