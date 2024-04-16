@@ -12,7 +12,7 @@ async function resolveUrl(url: string) {
     const resolveUrl = await axios.get(url, { headers });
     const $ = cheerio.load(resolveUrl.data);
     const data = JSON.parse($("#__UNIVERSAL_DATA_FOR_REHYDRATION__").html()!);
-    return data["__DEFAULT_SCOPE__"]["webapp.video-detail"]["canonical"];
+    return data["__DEFAULT_SCOPE__"]["seo.abtest"]["canonical"];
 }
 
 export default async function tiktok(url: string) {
