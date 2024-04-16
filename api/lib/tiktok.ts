@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { writeFileSync } from "fs";
 
 const headers = {
     referer: "https://www.tiktok.com/",
@@ -7,8 +8,17 @@ const headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
 };
 
+async function resolveUrl(url: string) {
+    const resolveUrl = await axios.get(url, { headers });
+    const $ = cheerio.load(resolveUrl.data);
+    const data = JSON.parse($("#__UNIVERSAL_DATA_FOR_REHYDRATION__").html()!);
+    return data["__DEFAULT_SCOPE__"]["webapp.video-detail"]["canonical"];
+}
+
 export default async function tiktok(url: string) {
-    const req = await axios.get(url, { headers });
+    const _url = await resolveUrl(url);
+
+    const req = await axios.get(_url, { headers });
 
     const $ = cheerio.load(req.data);
     const data = JSON.parse($("#__UNIVERSAL_DATA_FOR_REHYDRATION__").html()!);
